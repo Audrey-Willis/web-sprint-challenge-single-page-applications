@@ -13,7 +13,7 @@ import React, {useState,useEffect} from "react";
      const blankPizza = {
          name: "",
          size:"",
-         peperoni:false,
+         pepperoni:false,
          sausage:false,
          anchovies:false,
          special:""
@@ -26,9 +26,9 @@ import React, {useState,useEffect} from "react";
      const [errors,setErrors] = useState({
              name: "",
              size:"",
-             peperoni:"",
+             pepperoni:"",
              sausage:"",
-             turtleNeck:"",
+             bacon:"",
              anchovies:"",
              special:""
      });
@@ -36,7 +36,7 @@ import React, {useState,useEffect} from "react";
          const pizzaSchema = yup.object().shape({
              name:yup.string().test('len','Must Include a Name for the Order and consist of more than 2 characters', val => val.length > 2),
              size:yup.boolean().oneOf(["Small","Medium","Large"]),
-             peperoni: yup.boolean().oneOf([true,false]),
+             pepperoni: yup.boolean().oneOf([true,false]),
              sausage: yup.boolean().oneOf([true,false]),
              bacon: yup.boolean().oneOf([true,false]),
              anchovies: yup.boolean().oneOf([true,false]),
@@ -75,7 +75,7 @@ import React, {useState,useEffect} from "react";
              setForm(newFormData);
          }
 
-     //submit function
+     //submit function (posted to database)
          const formSubmit = e => {
              e.preventDefault(); //so the page won't reload
              axios.post("https://reqres.in/api/users",formState) //so the order will be posted to the server
@@ -90,7 +90,7 @@ import React, {useState,useEffect} from "react";
          }
                  //use effect to make sure person provides a name 
                  useEffect(() => {
-                     if(formState.name.length < 3){
+                     if(formState.name.length < 2){
                         setButtonDisabled(true);
                     }else{setButtonDisabled(false)}
                 }, [formState]);
@@ -100,7 +100,7 @@ import React, {useState,useEffect} from "react";
              
              <label htmlFor= "name"> 
                  Name:
-                 <input type = "text" name ="name" value = {formState.name} onChange = {inputChange} />
+                 <input type = "text" name ="name" value = {formState.name} onChange = {inputChange} data-cy="name" />
                  {errors.name.length > 2 ? <p>{errors.name}</p> : null } 
              </label>
              
@@ -108,10 +108,10 @@ import React, {useState,useEffect} from "react";
              <div>
              <label htmlFor= "size">
                   Size:
-                 <select name ="size">
-                     <option value = "Small">Small</option>
-                     <option value = "Medium">Medium</option>
-                     <option value = "Large">Large</option>
+                 <select name ="size" data-cy="size">
+                     <option value = "Small" data-cy="Small">Small</option>
+                     <option value = "Medium" data-cy="Medium">Medium</option>
+                     <option value = "Large" data-cy="Large">Large</option>
                  </select>
              </label>
              </div>
@@ -120,22 +120,22 @@ import React, {useState,useEffect} from "react";
              <h2> Choose your toppings!</h2>
              
              <li /* topping one */> 
-             <label htmlFor= "peperoni">
-                 <input type = "checkbox" checked = {formState.peperoni} value = {formState.peperoni} name ="peperoni" onChange = {inputChange} />
+             <label htmlFor= "pepperoni">
+                 <input type = "checkbox" checked = {formState.pepperoni} value = {formState.pepperoni} name ="pepperoni" onChange = {inputChange} data-cy="pepperoni" />
                  Peperoni
              </label>
              </li>
              
              <li /* topping two */>
              <label htmlFor= "sausage">
-                <input type = "checkbox" name ="sausage" checked ={formState.sausage} value ={formState.sausage} onChange = {inputChange}/>
+                <input type = "checkbox" name ="sausage" checked ={formState.sausage} value ={formState.sausage} onChange = {inputChange} data-cy="sausage"/>
                  Sausage
                  </label>
              </li>
              
              <li /* topping three */>
              <label htmlFor= "bacon">
-                <input type = "checkbox" name ="bacon" checked = {formState.bacon} value = {formState.turtleNeck} onChange = {inputChange} />
+                <input type = "checkbox" name ="bacon" checked = {formState.bacon} value = {formState.bacon} onChange = {inputChange} data-cy="bacon" />
                 Bacon
              </label>
              </li>
@@ -148,17 +148,17 @@ import React, {useState,useEffect} from "react";
              </li>
 
              </div>
-
-             <label htmlFor= "special">
+                
+             <label htmlFor= "special" /* special requests */>
                  <p>
                  Any special Directions for your order?
                  </p>
-                 <textarea name ="special" value = {formState.special} onChange = {inputChange} />
+                 <textarea name ="special" value = {formState.special} onChange = {inputChange} data-cy="special"/>
                  {errors.special.length > 2 ? <p>{errors.special}</p> : null}
              </label>
              
              <div>
-             <Button disabled = {buttonDisabled} type = "submit" color = "primary" > Submit </Button>
+             <Button disabled = {buttonDisabled} type = "submit" color = "primary" data-cy= "submit" > Submit </Button>
              <pre> Confirmation {JSON.stringify(post, null, 2)} </pre>
              </div>
          </form>
